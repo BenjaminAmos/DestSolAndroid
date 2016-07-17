@@ -7,7 +7,8 @@ buildscript {
     }
 }
 
-apply plugin: "android"
+// TODO: Examine the switch from plain "android" to this some more
+apply plugin: "com.android.application"
 
 repositories {
     // Good ole Maven central
@@ -24,6 +25,7 @@ repositories {
 configurations { natives }
 
 dependencies {
+    // TODO: Maybe exclude the commons-logging dependency from main (or set it as 'provided' here)
     compile project(":main")
     compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
     natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
