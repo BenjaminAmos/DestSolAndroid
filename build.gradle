@@ -4,11 +4,13 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
     }
 }
 
 // TODO: Examine the switch from plain "android" to this some more
 apply plugin: "com.android.application"
+apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
     // Good ole Maven central
@@ -65,6 +67,12 @@ ext {
 android {
     buildToolsVersion "20.0.0"
     compileSdkVersion 18
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
