@@ -4,7 +4,7 @@
     android:versionCode="8"
     android:versionName="2.0.0" >
 
-    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="18" />
+    <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="18" />
 
     <application
         android:allowBackup="true"
