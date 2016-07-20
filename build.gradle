@@ -22,10 +22,15 @@ repositories {
     maven { url "http://artifactory.terasology.org/artifactory/virtual-repo-live" }
 }
 
-configurations { natives }
+configurations {
+    natives
+    compile {
+        // This avoids a conflict with an Android provided commons-logging
+        exclude group: 'commons-logging'
+    }
+}
 
 dependencies {
-    // TODO: Maybe exclude the commons-logging dependency from main (or set it as 'provided' here)
     compile project(":main")
     compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
     natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
@@ -62,6 +67,15 @@ ext {
     }
 }
 
+// Potential workaround for lambdas being used in libraries not getting along with the Android Jack compiler ... doesn't help enough :(
+/*
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xbootclasspath/a:" + System.properties.get("java.home") + "/lib/rt.jar"
+    }
+}
+*/
+
 android {
     buildToolsVersion "24.0.0"
     compileSdkVersion 18
@@ -92,6 +106,16 @@ android {
 
         instrumentTest.setRoot('tests')
     }
+
+    // This helps avoid file duplication issues from multiple of these coming from different jars
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
     lintOptions {
         abortOnError false
     }
