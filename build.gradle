@@ -26,7 +26,16 @@ configurations {
     natives
     compile {
         // This avoids a conflict with an Android provided commons-logging
-        exclude group: 'commons-logging'
+        exclude module: 'commons-logging'
+
+        // This one avoids a conflict with DocumentBuilder - Android has its own XML thing
+        exclude module: 'xml-apis'
+
+        // If this is included some inner class warnings are generated. Seems like a non-issue?
+        //exclude module: 'commons-vfs2'
+
+        // No unit tests yet but one search hit excluded junit - unsure why or if we'd ever need it for the Android module
+        //exclude module: 'junit'
     }
 }
 
