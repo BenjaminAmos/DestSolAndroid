@@ -4,10 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 import com.google.common.base.Charsets;
-import com.google.common.collect.Sets;
-import com.google.common.collect.Queues;
 import com.google.common.io.ByteStreams;
-import com.google.common.io.CharStreams;
 import org.destinationsol.Const;
 import org.destinationsol.assets.AssetHelper;
 import org.destinationsol.assets.Assets;
@@ -43,7 +40,6 @@ import org.terasology.gestalt.naming.Version;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilePermission;
 import java.io.IOException;
@@ -55,10 +51,10 @@ import java.lang.reflect.ReflectPermission;
 import java.security.Policy;
 import java.util.Locale;
 import java.util.Set;
+import java.util.HashSet;
 
 public class AndroidModuleManager extends ModuleManager {
     private Context context;
-    private Module engineCodeModule;
 
     public AndroidModuleManager(Context context) {
         this.context = context;
@@ -76,7 +72,7 @@ public class AndroidModuleManager extends ModuleManager {
             ModuleFactory moduleFactory = new DestinationSolModuleFactory();
 
             registry = new TableModuleRegistry();
-            Set<Module> requiredModules = Sets.newHashSet();
+            Set<Module> requiredModules = new HashSet<Module>();
 
             // The "assets" directory only exists within the APK, which makes it inefficient to traverse
             copyModulesToDataDir(filesPath, assets);
@@ -239,105 +235,9 @@ public class AndroidModuleManager extends ModuleManager {
         //Policy.setPolicy(new ModuleSecurityPolicy());
         //System.setSecurityManager(new ModuleSecurityManager());
 
-        environment = new ModuleEnvironment(registry, permissionFactory, (module, parent, permissionProvider) -> AndroidModuleClassLoader.create(module, parent, permissionProvider, context.getCodeCacheDir()));
+        environment = new ModuleEnvironment(registry, permissionFactory, (module, parent, permissionProvider) -> AndroidModuleClassLoader.create(module, parent, permissionProvider, context.getCacheDir()));
         AssetHelper helper = new AndroidAssetHelper();
         helper.init(environment);
         Assets.initialize(helper);
-    }
-
-    public void printAvailableModules() {
-        AssetHelper assetHelper = Assets.getAssetHelper();
-        Set<ResourceUrn> jsonList = assetHelper.list(Json.class);
-        Set<ResourceUrn> emitterList = assetHelper.list(Emitter.class);
-        Set<ResourceUrn> soundList = assetHelper.list(OggSound.class);
-        Set<ResourceUrn> musicList = assetHelper.list(OggMusic.class);
-        Set<ResourceUrn> textureList = assetHelper.list(DSTexture.class);
-
-        for (Module module : registry) {
-            String moduleName = module.getId().toString();
-
-            Log.d("DESTINATION_SOL_DEBUG", "Module Discovered: " + module.toString());
-
-            int armors = 0;
-            int abilityCharges = 0;
-            int clips = 0;
-            int engines = 0;
-            int shields = 0;
-            int jsonOthers = 0;
-            int emitters = 0;
-            int sounds = 0;
-            int music = 0;
-            int textures = 0;
-
-            for (ResourceUrn assetUrn : jsonList) {
-                String assetName = assetUrn.toString();
-
-                if (assetName.startsWith(moduleName + ":")) {
-                    if (assetName.endsWith("Armor")) {
-                        armors++;
-                    } else if (assetName.endsWith("AbilityCharge")) {
-                        abilityCharges++;
-                    } else if (assetName.endsWith("Clip")) {
-                        clips++;
-                    } else if (assetName.endsWith("Engine")) {
-                        engines++;
-                    } else if (assetName.endsWith("Shield")) {
-                        shields++;
-                    } else {
-                        jsonOthers++;
-                    }
-                }
-            }
-
-            for (ResourceUrn assetUrn : emitterList) {
-                String assetName = assetUrn.toString();
-
-                if (assetName.startsWith(moduleName + ":")) {
-                    emitters++;
-                }
-            }
-
-            for (ResourceUrn assetUrn : soundList) {
-                String assetName = assetUrn.toString();
-
-                if (assetName.startsWith(moduleName + ":")) {
-                    sounds++;
-                }
-            }
-
-            for (ResourceUrn assetUrn : musicList) {
-                String assetName = assetUrn.toString();
-
-                if (assetName.startsWith(moduleName + ":")) {
-                    music++;
-                }
-            }
-
-            for (ResourceUrn assetUrn : textureList) {
-                String assetName = assetUrn.toString();
-
-                if (assetName.startsWith(moduleName + ":")) {
-                    textures++;
-                }
-            }
-
-            Log.d("DESTINATION_SOL_DEBUG", "\t-Items:");
-            Log.d("DESTINATION_SOL_DEBUG", "\t\t-Armors: " + Integer.toString(armors));
-            Log.d("DESTINATION_SOL_DEBUG", "\t\t-AbilityCharges: " + Integer.toString(abilityCharges));
-            Log.d("DESTINATION_SOL_DEBUG", "\t\t-Clips: " + Integer.toString(clips));
-            Log.d("DESTINATION_SOL_DEBUG", "\t\t-Engines: " + Integer.toString(engines));
-            Log.d("DESTINATION_SOL_DEBUG", "\t\t-Shields: " + Integer.toString(shields));
-            Log.d("DESTINATION_SOL_DEBUG", "\t\t-Others: " + Integer.toString(jsonOthers));
-
-            Log.d("DESTINATION_SOL_DEBUG", "\t-Emitters: " + Integer.toString(emitters));
-
-            Log.d("DESTINATION_SOL_DEBUG", "\t-Sounds: " + Integer.toString(sounds));
-
-            Log.d("DESTINATION_SOL_DEBUG", "\t-Music: " + Integer.toString(music));
-
-            Log.d("DESTINATION_SOL_DEBUG", "\t-Textures: " + Integer.toString(textures));
-
-            Log.d("DESTINATION_SOL_DEBUG", "");
-        }
     }
 }

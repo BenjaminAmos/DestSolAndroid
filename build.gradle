@@ -10,9 +10,17 @@ buildscript {
         mavenLocal()
         mavenCentral()
         google()
+        jcenter();
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.2'
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            // The version of ProGuard bundled with the Android Gradle Plugin is too old to support API back-porting
+            force 'net.sf.proguard:proguard-base:6.2.0'
+        }
     }
 }
 
@@ -51,13 +59,14 @@ dependencies {
     // TODO: Maybe exclude the commons-logging dependency from main (or set it as 'provided' here)
     api 'com.google.guava:guava:27.0.1-android'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'org.apache.commons:commons-vfs2:2.2'
     compile group: 'com.android.support', name: 'support-annotations', version: '28.0.0'
     implementation 'net.jcip:jcip-annotations:1.0'
     implementation 'net.sf.trove4j:trove4j:3.0.3'
     implementation 'com.google.protobuf:protobuf-java:3.4.0'
     implementation 'com.googlecode.gentyref:gentyref:1.2.0'
-    compile(group: 'com.github.everit-org.json-schema', name: 'org.everit.json.schema', version: '1.9.2', ext: 'pom')
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'net.sourceforge.streamsupport:streamsupport:1.7.1'
+    api "com.github.everit-org.json-schema:org.everit.json.schema:1.11.1"
 
     compile(project(":engine"))
     compile(group: 'org.terasology.gestalt', name: 'gestalt-android', version: '7.0.3', ext: 'aar')
@@ -80,7 +89,7 @@ ext {
     keyPassToUse = "notset"
 
     compileSdk = 28
-    minSdk = 24
+    minSdk = 16
     targetSdk = 28
 
     // Load values from properties passed to the project, such as via gradle.properties in the user's home .gradle dir
@@ -141,7 +150,20 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile(
+                    'proguard-android.txt'),
+                    'proguard.cfg',
+                    'proguard-project.txt'
+        }
+
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile(
+                    'proguard-android.txt'),
+                    'proguard.cfg',
+                    'proguard-project.txt'
             debuggable false
             jniDebuggable false
             signingConfig signingConfigs.release
@@ -305,6 +327,17 @@ task reflectModules() {
 }
 
 preBuild.dependsOn(reflectModules)
+
+// Registers a bytecode transformer to substitute some of the classes/methods not present in API 16.
+// The streams API usage should be redirected to the streamsupport library by ProGuard.
+project.android.registerTransform(new RedirectClassesTransform([
+        "org.destinationsol", "org.terasology",
+        "com.google.common.base", "com.google.gson",
+        "org.apache.commons.collections4",
+        "org.apache.commons.validator",
+        "org.apache.commons.logging",
+        "org.everit.json.schema"
+]))
 
 def androidSdkPath() {
     def path

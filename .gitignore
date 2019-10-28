@@ -9,6 +9,8 @@ gen/
 *.iml
 out/
 assets/res
+buildSrc/.gradle
+buildSrc/build
 
 # This prop file contains a sdk.dir meant to point to your local Android SDK
 local.properties

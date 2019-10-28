@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.miloshpetrov.sol2.android"
     android:versionCode="10"
     android:versionName="2.0.0" >
+
+    <uses-sdk tools:overrideLibrary="org.terasology.gestalt.android"/>
 
     <application
         android:allowBackup="true"

@@ -15,18 +15,19 @@
  */
 package org.destinationsol.android;
 
-import org.destinationsol.android.assets.AndroidDSTextureFileFormat;
-import org.destinationsol.android.assets.AndroidEmitterFileFormat;
-import org.destinationsol.android.assets.AndroidJsonFileFormat;
 import org.destinationsol.android.assets.AndroidOggMusicFileFormat;
 import org.destinationsol.android.assets.AndroidOggSoundFileFormat;
 import org.destinationsol.assets.AssetHelper;
 import org.destinationsol.assets.audio.OggMusic;
+import org.destinationsol.assets.audio.OggMusicFileFormat;
 import org.destinationsol.assets.audio.OggSound;
+import org.destinationsol.assets.audio.OggSoundFileFormat;
 import org.destinationsol.assets.emitters.Emitter;
+import org.destinationsol.assets.emitters.EmitterFileFormat;
 import org.destinationsol.assets.fonts.Font;
 import org.destinationsol.assets.fonts.FontFileFormat;
 import org.destinationsol.assets.json.Json;
+import org.destinationsol.assets.json.JsonFileFormat;
 import org.destinationsol.assets.textures.DSTexture;
 import org.terasology.gestalt.assets.Asset;
 import org.terasology.gestalt.assets.AssetData;
@@ -35,6 +36,7 @@ import org.terasology.gestalt.assets.format.AssetDataFile;
 import org.terasology.gestalt.assets.format.producer.AssetFileDataProducer;
 import org.terasology.gestalt.assets.module.ModuleAwareAssetTypeManagerImpl;
 import org.terasology.gestalt.module.ModuleEnvironment;
+import org.destinationsol.assets.textures.DSTextureFileFormat;
 
 import java.util.HashSet;
 import java.util.List;
@@ -56,13 +58,13 @@ public class AndroidAssetHelper extends AssetHelper {
         ((AssetFileDataProducer)assetTypeManager.getAssetType(Font.class).get().getProducers().get(0)).addAssetFormat(new FontFileFormat());
 
         assetTypeManager.createAssetType(Emitter.class, Emitter::new, "emitters");
-        ((AssetFileDataProducer)assetTypeManager.getAssetType(Emitter.class).get().getProducers().get(0)).addAssetFormat(new AndroidEmitterFileFormat());
+        ((AssetFileDataProducer)assetTypeManager.getAssetType(Emitter.class).get().getProducers().get(0)).addAssetFormat(new EmitterFileFormat());
 
         assetTypeManager.createAssetType(Json.class, Json::new, "collisionMeshes", "ships", "items", "configs", "grounds", "mazes", "asteroids", "schemas");
-        ((AssetFileDataProducer)assetTypeManager.getAssetType(Json.class).get().getProducers().get(0)).addAssetFormat(new AndroidJsonFileFormat());
+        ((AssetFileDataProducer)assetTypeManager.getAssetType(Json.class).get().getProducers().get(0)).addAssetFormat(new JsonFileFormat());
 
         assetTypeManager.createAssetType(DSTexture.class, DSTexture::new, "textures", "ships", "items", "grounds", "mazes", "asteroids", "fonts");
-        ((AssetFileDataProducer)assetTypeManager.getAssetType(DSTexture.class).get().getProducers().get(0)).addAssetFormat(new AndroidDSTextureFileFormat());
+        ((AssetFileDataProducer)assetTypeManager.getAssetType(DSTexture.class).get().getProducers().get(0)).addAssetFormat(new DSTextureFileFormat());
 
         assetTypeManager.switchEnvironment(environment);
     }

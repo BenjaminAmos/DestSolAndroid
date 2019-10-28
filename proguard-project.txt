@@ -20,12 +20,40 @@
 #}
 
 -verbose
+-target 1.6
+
+-keep class org.terasology.** { *; }
+-keep class org.destinationsol.** { *; }
+-keep class ** implements org.destinationsol.game.ship.ShipAbility { *; }
+-keep class org.reflections.** { *; }
+-keep class org.xml.** { *; }
+-keep class org.dom4j.** { *; }
+-keep class org.apache.commons.vfs2.** { *; }
+-keep class java8.** { *; }
+-keep class com.miloshpetrov.sol2.** { *; }
 
 -dontwarn android.support.**
 -dontwarn com.badlogic.gdx.backends.android.AndroidFragmentApplication
 -dontwarn com.badlogic.gdx.utils.GdxBuild
 -dontwarn com.badlogic.gdx.physics.box2d.utils.Box2DBuild
 -dontwarn com.badlogic.gdx.jnigen.BuildTarget*
+-dontwarn org.joda.time.**
+-dontwarn javax.**
+-dontwarn org.apache.commons.**
+-dontwarn org.reflections.**
+-dontwarn org.dom4j.**
+-dontwarn javassist.**
+-dontwarn com.google.protobuf.**
+-dontwarn com.google.common.**
+-dontwarn com.damnhandy.uri.template.jackson.**
+-dontwarn org.xml.**
+-dontwarn java8.**
+-dontwarn org.w3c.**
+
+-dontobfuscate
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-useuniqueclassmembernames
 
 -keepclassmembers class com.badlogic.gdx.backends.android.AndroidInput* {
    <init>(com.badlogic.gdx.Application, android.content.Context, java.lang.Object, com.badlogic.gdx.backends.android.AndroidApplicationConfiguration);
