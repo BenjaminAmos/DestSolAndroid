@@ -116,6 +116,22 @@ class RedirectingClassVisitor extends ClassVisitor {
             } else if (opcode == Opcodes.INVOKESPECIAL && owner.equals('java/util/Locale$Category')) {
                 // java.util.Locale.Category requires API 24
                 super.visitMethodInsn(opcode, 'org/destinationsol/android/compat/Locale$Category', name, description, isInterface)
+            } else if (opcode == Opcodes.INVOKEVIRTUAL && owner.equals('org/json/JSONObject')) {
+                if (name.equals("keySet")) {
+                    // org.json.JSONObject.keySet is not supported on Android at all, however in later versions it was included as an internal undocumented API
+                    super.visitMethodInsn(Opcodes.INVOKESTATIC, 'org/destinationsol/android/compat/JSONObject', name, '(Lorg/json/JSONObject;)Ljava/util/Set;', isInterface)
+                } else if (name.equals("getFloat") && description.equals('(Ljava/lang/String;)F')) {
+                    // org.json.JSONObject.getFloat is not supported on Android at all, in any version but it is used frequently in the Destination Sol codebase
+                    super.visitMethodInsn(Opcodes.INVOKESTATIC, 'org/destinationsol/android/compat/JSONObject', name, '(Lorg/json/JSONObject;Ljava/lang/String;)F', isInterface)
+                } else if (name.equals("optFloat") && description.equals('(Ljava/lang/String;)F')) {
+                    // org.json.JSONObject.optFloat is not supported on Android at all, in any version but it is used frequently in the Destination Sol codebase
+                    super.visitMethodInsn(Opcodes.INVOKESTATIC, 'org/destinationsol/android/compat/JSONObject', name, '(Lorg/json/JSONObject;Ljava/lang/String;)F', isInterface)
+                } else if (name.equals("optFloat") && description.equals('(Ljava/lang/String;F)F')) {
+                    // org.json.JSONObject.optFloat is not supported on Android at all, in any version but it is used frequently in the Destination Sol codebase
+                    super.visitMethodInsn(Opcodes.INVOKESTATIC, 'org/destinationsol/android/compat/JSONObject', name, '(Lorg/json/JSONObject;Ljava/lang/String;F)F', isInterface)
+                } else {
+                    super.visitMethodInsn(opcode, owner, name, description, isInterface)
+                }
             } else {
                 super.visitMethodInsn(opcode, owner, name, description, isInterface)
             }

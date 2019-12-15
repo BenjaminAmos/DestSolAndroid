@@ -21,7 +21,7 @@ public final class StringUtils {
     private StringUtils() {
     }
 
-    public String join(CharSequence delimiter, CharSequence... elements) {
+    public static String join(CharSequence delimiter, CharSequence... elements) {
         if (elements.length == 0) {
             return "";
         }
@@ -36,7 +36,7 @@ public final class StringUtils {
         return builder.toString();
     }
 
-    public String join(CharSequence delimiter, Iterable<? extends CharSequence> elements) {
+    public static String join(CharSequence delimiter, Iterable<? extends CharSequence> elements) {
         StringBuilder builder = new StringBuilder();
         Iterator<? extends CharSequence> elementIterator = elements.iterator();
         while (true) {

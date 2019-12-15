@@ -18,11 +18,15 @@ repositories {
     google()
     mavenCentral()
     jcenter()
+
+    // Used for JSON schemas
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
     implementation 'org.ow2.asm:asm:7.2'
     implementation 'com.android.tools.build:gradle-api:3.3.2'
+    implementation "com.github.everit-org.json-schema:org.everit.json.schema:1.11.1"
 }
 
 sourceSets.main.java.srcDirs += ["../android/src/org/destinationsol/android/compat"]

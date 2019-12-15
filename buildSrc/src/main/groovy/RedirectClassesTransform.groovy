@@ -41,7 +41,7 @@ class RedirectClassesTransform extends Transform {
 
     @Override
     public java.util.Set<? super QualifiedContent.Scope> getScopes() {
-        return EnumSet.of(QualifiedContent.Scope.EXTERNAL_LIBRARIES, QualifiedContent.Scope.PROJECT);
+        return EnumSet.of(QualifiedContent.Scope.EXTERNAL_LIBRARIES, QualifiedContent.Scope.PROJECT, QualifiedContent.Scope.SUB_PROJECTS);
     }
 
     @Override

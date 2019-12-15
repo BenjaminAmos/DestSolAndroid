@@ -67,6 +67,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'net.sourceforge.streamsupport:streamsupport:1.7.1'
     api "com.github.everit-org.json-schema:org.everit.json.schema:1.11.1"
+    implementation "org.slf4j:slf4j-android:1.7.21"
 
     compile(project(":engine"))
     compile(group: 'org.terasology.gestalt', name: 'gestalt-android', version: '7.0.3', ext: 'aar')
