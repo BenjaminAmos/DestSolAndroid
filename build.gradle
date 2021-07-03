@@ -236,19 +236,6 @@ task exportModules() {
             }
         }
 
-        copy {
-            from "$rootDir/engine/src/main/resources/org/destinationsol"
-            into "$projectDir/assets/modules/engine"
-            include "assets/**"
-            include "module.json"
-        }
-
-        copy {
-            from "$rootDir/engine/build/classes"
-            into "$projectDir/assets/modules/engine"
-            include "reflections.cache"
-        }
-
         dexModules()
     }
 }
